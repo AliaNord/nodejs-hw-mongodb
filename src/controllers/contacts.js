@@ -43,7 +43,15 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const postContactController = async (req, res) => {
-  const contactData = await postContact(req.body);
+  const userId = req.user._id;
+
+  if (!userId) {
+    return res.status(400).json({
+      status: 400,
+      message: 'User ID is missing',
+    });
+  }
+  const contactData = await postContact({ ...req.body, userId });
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
