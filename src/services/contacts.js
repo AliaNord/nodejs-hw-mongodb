@@ -2,6 +2,7 @@ import { Contacts } from '../db/models/contact.js';
 import { createPagination } from '../utils/createPagination.js';
 
 export const getAllContacts = async ({
+  userId,
   page = 1,
   perPage = 4,
   sortOrder = 'asc',
@@ -9,7 +10,7 @@ export const getAllContacts = async ({
   filter = {},
 }) => {
   const skip = (page - 1) * perPage;
-  const contactsQuery = Contacts.find();
+  const contactsQuery = Contacts.find({ userId });
 
   if (filter.type) {
     contactsQuery.where('contactType').equals(filter.type);
@@ -32,11 +33,13 @@ export const getAllContacts = async ({
   };
 };
 
-export const getContactById = (id) => Contacts.findById(id);
+export const getContactById = (id, userId) =>
+  Contacts.findById({ _id: id, userId });
 
 export const postContact = (contactData) => Contacts.create(contactData);
 
-export const deleteContactById = (id) => Contacts.findByIdAndDelete(id);
+export const deleteContactById = (id, userId) =>
+  Contacts.findByIdAndDelete({ _id: id, userId });
 
-export const patchContactById = (id, contactData) =>
-  Contacts.findByIdAndUpdate(id, contactData, { new: true });
+export const patchContactById = (id, contactData, userId) =>
+  Contacts.findByIdAndUpdate({ _id: id, userId }, contactData, { new: true });

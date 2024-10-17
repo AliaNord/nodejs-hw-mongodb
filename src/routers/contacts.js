@@ -18,12 +18,13 @@ const contactsRouter = Router();
 contactsRouter.use('/:contactId', isValidId('contactId'));
 contactsRouter.use('/', authenticate);
 
-contactsRouter.get('/', ctrlWrapper(getContactsController));
+contactsRouter.get('/', authenticate, ctrlWrapper(getContactsController));
 
 contactsRouter.get('/:contactId', ctrlWrapper(getContactByIdController));
 
 contactsRouter.post(
   '/',
+  authenticate,
   validateBody(createContactValidationSchema),
   ctrlWrapper(postContactController),
 );
