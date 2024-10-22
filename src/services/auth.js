@@ -23,7 +23,7 @@ export const createActiveSession = async (userId) => {
   const accessTokenValidUntil = Date.now() + FIFTEEN_MINUTES;
   const refreshTokenValidUntil = Date.now() + THIRTY_DAYS;
 
-  return SessionsCollection.create({
+  return await SessionsCollection.create({
     userId,
     accessToken,
     refreshToken,
