@@ -37,30 +37,6 @@ export const findSession = (accessToken) =>
 
 export const findUserById = (id) => UsersCollection.findById(id);
 
-// export const refreshSession = async (sessionId, refreshToken) => {
-//   const session = await SessionsCollection.findOne({
-//     _id: sessionId,
-//     refreshToken,
-//   });
-//   if (!session) {
-//     throw createHttpError(401, 'Session not found');
-//   }
-
-//   const now = new Date();
-//   if (session.refreshTokenValidUntil < now) {
-//     throw createHttpError(401, 'Refresh token expired');
-//   }
-//   await SessionsCollection.deleteOne({
-//     _id: sessionId,
-//     refreshToken,
-//   });
-//   const newSession = await SessionsCollection.create({
-//     userId: session.userId,
-//     ...createActiveSession(),
-//   });
-//   return newSession;
-// };
-
 export const refreshSession = async (sessionId, refreshToken) => {
   const session = await SessionsCollection.findOne({
     _id: sessionId,
