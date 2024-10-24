@@ -41,6 +41,10 @@ export const usersLoginController = async (req, res) => {
     throw createHttpError(401, 'Email or password is wrong');
   }
   const session = await createActiveSession(user._id);
+  res.cookie('sessionId', session._id, {
+    httpOnly: true,
+    expires: new Date(Date.now() + FIFTEEN_MINUTES),
+  });
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     expires: new Date(Date.now() + THIRTY_DAYS),
@@ -57,7 +61,7 @@ const setupSessionCookies = (session, res) => {
     httpOnly: true,
     expires: new Date(Date.now() + FIFTEEN_MINUTES),
   });
-  res.cookie('sessionToken', session.refreshToken, {
+  res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     expires: new Date(Date.now() + FIFTEEN_MINUTES),
   });
@@ -66,7 +70,7 @@ const setupSessionCookies = (session, res) => {
 export const refreshUserSessionController = async (req, res) => {
   const session = await refreshSession(
     req.cookies.sessionId,
-    req.cookies.sessionToken,
+    req.cookies.refreshToken,
   );
   setupSessionCookies(session, res);
 
